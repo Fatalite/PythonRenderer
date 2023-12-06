@@ -33,7 +33,8 @@ class Vec3D:
         self.z = self.arr[2]
 
     def __sub__(self, other):
-        return 
+        return self.__class__(*[ds - do for ds, do in zip(self.arr, other.arr)])
+
 # -------------------- Matrix --------------------
 class Mat4D:
     def __init__(self, NArray = None, Value = None):
@@ -80,6 +81,12 @@ def cross(v1 : Vec3D, v2 : Vec3D):
     result = Vec3D(np.cross(v1.arr, v2.arr))
     
     return result
+
+def get_light_intensity(face) -> float:
+    light = Vec3D(-2, 4, -10)
+    v1, v2, v3 = face
+    up = normalize(cross(v2 - v1, v3 - v1))
+    return dot(up, normalize(light))
 
 #-------------------- Drawing Module --------------------
 #-------------------- Drawing Func --------------------
