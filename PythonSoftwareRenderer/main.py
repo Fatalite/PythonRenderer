@@ -1,4 +1,4 @@
-from render import model
+from render import model, camera, core, scene
 
 # External Module
 # Numpy : for fast array 
@@ -11,10 +11,10 @@ from render import model
 # http://kunzhou.net/tex-models.htm
 
 # Model을 불러준다.
-ModelInstance = model.Model("obj/bunny.obj", "texture/oriental_bunny.jpg")
+ModelInstance = model.Model("obj/lowpoly_bunny.obj", "texture/oriental_bunny.jpg")
 
-for v in (ModelInstance.uv_indices): 
-    print(v.x)
-    print(v.y)
-    print(v.z)
+CameraInstance = camera.Camera(core.Vec3D(-1, -2,0), core.Vec3D(0,0,0), core.Vec3D(0,-1,0))
 
+SceneInstance = scene.Scene(CameraInstance, ModelInstance)
+
+SceneInstance.render("outputs/output.png")

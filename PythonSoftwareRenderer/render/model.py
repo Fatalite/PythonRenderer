@@ -1,6 +1,6 @@
 import numpy
 from PIL import Image
-from .core import Vec3D, Vec2D
+from .core import Vec3D, Vec2D, Vec4D
 
 # References
 # https://en.wikipedia.org/wiki/Wavefront_.obj_file
@@ -22,13 +22,12 @@ class Model:
                 for data in line.split(" "):
                     if data.startswith('v'): continue
                     data_of_list.append(float(data))
-                self.vertices.append(Vec3D(data_of_list[0], data_of_list[1], data_of_list[2]))
+                self.vertices.append(Vec4D(data_of_list[0], data_of_list[1], data_of_list[2],1))
 
             #UV Coordinate Data
             elif(line.startswith('vt ')):
-                tmp = line.split(" ")
-                uv_vertex = Vec2D(float(tmp[1]), float(tmp[2]))
-                self.uv_vertices.append(uv_vertex)
+                 u, v = [float(d) for d in line.strip("vt").strip().split(" ")]
+                 self.uv_vertices.append([u, v])
                 
             #Face Data
             elif(line.startswith('f ')):
@@ -36,23 +35,24 @@ class Model:
                 indice = []
                 uv_indice = []
                 for datas in data_of_list:
+                    
                     if datas.startswith('f'): continue
                     else:
-                        datas.split("/")
-                        indice.append(datas[0])
-                        uv_indice.append(datas[1])
+                        indice.append(int(datas.split("/")[0]))
+                        if(len(datas.split("/")) >= 2):
+                            uv_indice.append(int(datas.split("/")[1]))
 
                 self.indices.append(indice)
                 self.uv_indices.append(uv_indice)
 
 
         #Read Texture and Store Texture
-        TextureFile = Image.open(texture_address)
-        self.texture = TextureFile
+        #TextureFile = Image.open(texture_address)
+        #self.texture = TextureFile
 
         #Close File
         ModelFile.close()
-        TextureFile.close()
+        #TextureFile.close()
 
 
 
